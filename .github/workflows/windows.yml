@@ -20,6 +20,7 @@ jobs:
         run:  git clone https://github.com/xmrig/xmrig-deps.git
       - name: Build project on Windows
         run: |
+          PowerShell "(Get-Content src/donate.h)|%{$_ -Replace 'DonateLevel = 1','DonateLevel = 0'}|Set-Content src/donate.h"
           cmake . -G "MinGW Makefiles" -DXMRIG_DEPS=xmrig-deps\gcc\x64
           make -j2
           copy src\config.json .
