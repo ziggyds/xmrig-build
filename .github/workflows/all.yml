@@ -18,6 +18,7 @@ jobs:
       - name: Build project on Windows
         run: |
           PowerShell "(Get-Content src/donate.h) -replace 'DonateLevel = 1','DonateLevel = 0' | Set-Content src/donate.h"
+          Powershell "$ghetto=(Get-Content src\version.h | Select-String -Pattern 'APP_VERSION' -Encoding ASCII | ForEach-Object {($_ -split '\s+')[2]}).Trim('\"');$env:XMRIG_VERSION=$ghetto;$env:XMRIG_VERSION"
           cmake . -G "MinGW Makefiles" -DXMRIG_DEPS=xmrig-deps\gcc\x64
           make -j2
           copy src\config.json .
@@ -26,7 +27,7 @@ jobs:
       - name: Upload Windows build artifacts
         uses: actions/upload-artifact@v1
         with:
-          name: windows_build
+          name: windows_xmrig-${{ env.XMRIG_VERSION }}
           path: windows_build.zip
     
   build_lin:
@@ -51,7 +52,7 @@ jobs:
       - name: Store generated file
         uses: actions/upload-artifact@v2
         with:
-          name: xmrig-${{ env.XMRIG_VERSION }}
+          name: linux_xmrig-${{ env.XMRIG_VERSION }}
           path: build/xmrig
     
   build_macos:
