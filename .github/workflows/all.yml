@@ -35,9 +35,9 @@ jobs:
           path: windows_build.zip
     
   build_lin:
+    name: Build Linux artifacts
     runs-on: ubuntu-latest
     container: alpine:latest
-
     steps:
       - name: Checkout Repository master branch
         uses: actions/checkout@v2
