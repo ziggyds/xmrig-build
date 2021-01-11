@@ -17,8 +17,7 @@ jobs:
         run:  git clone https://github.com/xmrig/xmrig-deps.git
       - name: Get version
         run: |
-          $ghetto=(Get-Content src\version.h | Select-String -Pattern 'APP_VERSION' -Encoding ASCII | ForEach-Object {($_ -split '\s+')[2]}).Trim('\"');
-          $env:XMRIG_VERSION=$ghetto;
+          (Get-Content src\version.h | Select-String -Pattern 'APP_VERSION' -Encoding ASCII | ForEach-Object {($_ -split '\s+')[2]}).Trim('\"') | Out-File -FilePath $env:XMRIG_VERSION -Encoding utf8 -Append;
           $env:XMRIG_VERSION;
       - name: Build project on Windows
         run: |
@@ -31,7 +30,7 @@ jobs:
       - name: Upload Windows build artifacts
         uses: actions/upload-artifact@v1
         with:
-          name: windows_xmrig-${{ env.XMRIG_VERSION }}
+          name: windows_build
           path: windows_build.zip
     
   build_lin:
@@ -57,7 +56,7 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: linux_xmrig-${{ env.XMRIG_VERSION }}
-          path: build/xmrig
+          path: linux_build.tar.gz
     
   build_macos:
     name: Build MacOS artifacts
@@ -91,5 +90,63 @@ jobs:
       - name: Upload MacOS build artifacts
         uses: actions/upload-artifact@v1
         with:
-          name: macos_xmrig-${{ env.XMRIG_VERSION }}
+          name: macos_build
           path: macos_build.tar.gz
+
+  release:
+    needs: [build_win, build_lin, build_macos]
+    name: Create release and upload artifacts
+    runs-on: ubuntu-latest
+    steps:
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@v1.0.0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ env.XMRIG_VERSION }}
+          release_name: Release ${{ env.XMRIG_VERSION }}
+          draft: false
+          prerelease: false
+      - name: Set version
+        id: version
+        run: echo ::set-output name=VERSION::${{ env.XMRIG_VERSION }}
+      - name: Download Windows build artifact
+        uses: actions/download-artifact@v1
+        with:
+          name: windows_build
+      - name: Download Linux build artifact
+        uses: actions/download-artifact@v1
+        with:
+          name: linux_build
+      - name: Download MacOS build artifact
+        uses: actions/download-artifact@v1
+        with:
+          name: macos_build
+      - name: Upload Windows build release asset
+        uses: actions/upload-release-asset@v1.0.1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: windows_build/windows_build.zip
+          asset_name: xmrig-${{steps.version.outputs.VERSION}}-win64.zip
+          asset_content_type: application/zip
+      - name: Upload Ubuntu build release asset
+        uses: actions/upload-release-asset@v1.0.1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ubuntu_build/ubuntu_build.tar.gz
+          asset_name: xmrig-${{steps.version.outputs.VERSION}}-lin64.tar.gz
+          asset_content_type: application/zip
+      - name: Upload MacOS build release asset
+        uses: actions/upload-release-asset@v1.0.1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: macos_build/macos_build.tar.gz
+          asset_name: xmrig-${{steps.version.outputs.VERSION}}-mac64.tar.gz
+          asset_content_type: application/zip
