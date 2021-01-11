@@ -12,9 +12,10 @@ jobs:
     runs-on: windows-latest
     steps:
       - name: Checkout Repository master branch
-        uses: actions/checkout@v1
+        uses: actions/checkout@v2
         with:
-          repository: xmrig/xmrig@master
+          repository: xmrig/xmrig
+          ref: master  
       - name: Checkout deps
         run:  git clone https://github.com/xmrig/xmrig-deps.git
       - name: Build project on Windows
