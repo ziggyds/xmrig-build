@@ -1,8 +1,6 @@
 name: NoDevFee XMRIG (Linux)
 
 on:
-  push:
-    branches: [main]
   # Manueel starte
   workflow_dispatch:
 
