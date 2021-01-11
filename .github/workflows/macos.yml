@@ -28,7 +28,7 @@ jobs:
           cd ..
       - name: Build project on MacOS
         run: |
-          sed -i 's/DonateLevel = 1/DonateLevel = 0/g' src/donate.h
+          sed -i '' 's/DonateLevel = 1/DonateLevel = 0/g' src/donate.h
           echo "XMRIG_VERSION="`cat src/version.h | grep -Eo "APP_VERSION\s+\"(.+?)\"" | awk -F "\"" '{print $2}'` >> $GITHUB_ENV
           cmake . -DOPENSSL_ROOT_DIR=/usr/local/opt/openssl -DHWLOC_INCLUDE_DIR=hwloc-2.1.0/include -DHWLOC_LIBRARY=hwloc-2.1.0/hwloc/.libs/libhwloc.a
           make -j$(sysctl -n hw.logicalcpu)
