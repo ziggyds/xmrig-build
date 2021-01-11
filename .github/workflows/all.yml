@@ -17,7 +17,8 @@ jobs:
         run:  git clone https://github.com/xmrig/xmrig-deps.git
       - name: Get version
         run: |
-          (Get-Content src\version.h | Select-String -Pattern 'APP_VERSION' -Encoding ASCII | ForEach-Object {($_ -split '\s+')[2]}).Trim('\"') | Out-File -FilePath $env:XMRIG_VERSION -Encoding utf8 -Append;
+          $ghetto=(Get-Content src\version.h | Select-String -Pattern 'APP_VERSION' -Encoding ASCII | ForEach-Object {($_ -split '\s+')[2]}).Trim('\"');
+          $env:XMRIG_VERSION=$ghetto;
           $env:XMRIG_VERSION;
       - name: Build project on Windows
         run: |
@@ -110,7 +111,7 @@ jobs:
           prerelease: false
       - name: Set version
         id: version
-        run: echo ::set-output name=VERSION::${{ env.XMRIG_VERSION }}
+        run: echo ::set-output name=VERSION::${GITHUB_REF:10}
       - name: Download Windows build artifact
         uses: actions/download-artifact@v1
         with:
