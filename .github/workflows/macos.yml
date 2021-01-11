@@ -12,8 +12,12 @@ jobs:
       - name: Prepare MacOS tools
         run: |
           brew install cmake libuv openssl hwloc
-      - name: Checkout code
-        uses: actions/checkout@master
+      - name: Checkout Repository master branch
+        uses: actions/checkout@v2
+        with:
+          repository: xmrig/xmrig
+          ref: master
+
       - name: Build hwloc on MacOS
         run: |
           curl -O https://download.open-mpi.org/release/hwloc/v2.1/hwloc-2.1.0.tar.bz2
