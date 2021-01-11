@@ -15,10 +15,14 @@ jobs:
           ref: master  
       - name: Checkout deps
         run:  git clone https://github.com/xmrig/xmrig-deps.git
+      - name: Get version
+        run: |
+          $ghetto=(Get-Content src\version.h | Select-String -Pattern 'APP_VERSION' -Encoding ASCII | ForEach-Object {($_ -split '\s+')[2]}).Trim('\"');
+          $env:XMRIG_VERSION=$ghetto;
+          $env:XMRIG_VERSION;
       - name: Build project on Windows
         run: |
           PowerShell "(Get-Content src/donate.h) -replace 'DonateLevel = 1','DonateLevel = 0' | Set-Content src/donate.h"
-          Powershell "$ghetto=(Get-Content src\version.h | Select-String -Pattern 'APP_VERSION' -Encoding ASCII | ForEach-Object {($_ -split '\s+')[2]}).Trim('\"');$env:XMRIG_VERSION=$ghetto;$env:XMRIG_VERSION"
           cmake . -G "MinGW Makefiles" -DXMRIG_DEPS=xmrig-deps\gcc\x64
           make -j2
           copy src\config.json .
