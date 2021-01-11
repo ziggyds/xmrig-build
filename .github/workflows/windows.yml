@@ -1,8 +1,5 @@
 name: NoDevFee XMRIG Windows
 on:
-  push:
-    tags:
-    - 'v*'
   # Manueel starte
   workflow_dispatch:
 
