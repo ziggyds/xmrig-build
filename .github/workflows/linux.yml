@@ -1,0 +1,33 @@
+name: NoDevFee XMRIG (Linux)
+
+on:
+  push:
+    branches: [main]
+  # Manueel starte
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    container: alpine:latest
+
+    steps:
+      - name: Checkout Repository master branch
+        uses: actions/checkout@v2
+        with:
+          repository: xmrig/xmrig
+
+      - name: Build
+        run: |
+          apk add git make cmake libstdc++ gcc g++ automake libtool autoconf linux-headers
+          echo "XMRIG_VERSION="`cat src/version.h | grep -Eo "APP_VERSION\s+\"(.+?)\"" | awk -F "\"" '{print $2}'` >> $GITHUB_ENV
+          sed -i 's/DonateLevel = 1/DonateLevel = 0/g' src/donate.h
+          mkdir build
+          cd scripts && ./build_deps.sh && cd ../build
+          cmake .. -DXMRIG_DEPS=scripts/deps -DBUILD_STATIC=ON
+          make -j$(nproc)
+      - name: Store generated file
+        uses: actions/upload-artifact@v2
+        with:
+          name: xmrig-${{ env.XMRIG_VERSION }}
+          path: build/xmrig
