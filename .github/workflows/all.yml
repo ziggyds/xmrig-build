@@ -7,8 +7,6 @@ jobs:
   build_win:
     name: Build Windows artifacts
     runs-on: windows-latest
-    outputs:
-      version: ${{ steps.version.outputs.VERSION }}
     steps:
       - name: Checkout Repository master branch
         uses: actions/checkout@v2
@@ -18,11 +16,12 @@ jobs:
       - name: Checkout deps
         run:  git clone https://github.com/xmrig/xmrig-deps.git
       - name: Get version
-        id: version
+        id: identify
         run: |
           $ghetto=(Get-Content src\version.h | Select-String -Pattern 'APP_VERSION' -Encoding ASCII | ForEach-Object {($_ -split '\s+')[2]}).Trim('\"');
-          $ghetto
-          echo ::set-output name=VERSION::$ghetto;
+          $env:XMRIG_VERSION=$ghetto;
+          $env:XMRIG_VERSION
+          echo "::set-output name=version::${{ env.XMRIG_VERSION }}";
       - name: Build project on Windows
         run: |
           PowerShell "(Get-Content src/donate.h) -replace 'DonateLevel = 1','DonateLevel = 0' | Set-Content src/donate.h"
@@ -36,6 +35,8 @@ jobs:
         with:
           name: windows_build
           path: windows_build.zip
+    outputs:
+      version: ${{ steps.identify.outputs.version }}
     
   build_lin:
     name: Build Linux artifacts
@@ -108,8 +109,8 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: ${{needs.build_win.outputs.version}}
-          release_name: Release ${{needs.build_win.outputs.version}}
+          tag_name: ${{ needs.build_win.outputs.version }}
+          release_name: Release ${{ needs.build_win.outputs.version }}
           draft: false
           prerelease: false
       - name: Set version
