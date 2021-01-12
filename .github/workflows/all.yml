@@ -36,6 +36,7 @@ jobs:
         with:
           name: windows_build
           path: windows_build.zip
+          retention-days: 14
     outputs:
       version: ${{ steps.version.outputs.version }}
     
@@ -63,6 +64,7 @@ jobs:
         with:
           name: linux_build
           path: linux_build.tar.gz
+          retention-days: 14
     
   build_macos:
     name: Build MacOS artifacts
@@ -98,6 +100,7 @@ jobs:
         with:
           name: macos_build
           path: macos_build.tar.gz
+          retention-days: 14
 
   release:
     needs: [build_win, build_lin, build_macos]
