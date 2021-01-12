@@ -21,7 +21,7 @@ jobs:
           $ghetto=(Get-Content src\version.h | Select-String -Pattern 'APP_VERSION' -Encoding ASCII | ForEach-Object {($_ -split '\s+')[2]}).Trim('\"');
           $env:XMRIG_VERSION=$ghetto;
           $env:XMRIG_VERSION
-          echo "::set-output name=version::${{ env.XMRIG_VERSION }}";
+          echo "::set-output name=version::${ XMRIG_VERSION }";
       - name: Build project on Windows
         run: |
           PowerShell "(Get-Content src/donate.h) -replace 'DonateLevel = 1','DonateLevel = 0' | Set-Content src/donate.h"
