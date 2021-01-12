@@ -61,7 +61,7 @@ jobs:
       - name: Store generated file
         uses: actions/upload-artifact@v2
         with:
-          name: linux_xmrig-${{ env.XMRIG_VERSION }}
+          name: linux_build
           path: linux_build.tar.gz
     
   build_macos:
