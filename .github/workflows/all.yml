@@ -37,7 +37,7 @@ jobs:
           name: windows_build
           path: windows_build.zip
     outputs:
-      version: ${{ steps.identify.outputs.version }}
+      version: ${{ steps.version.outputs.version }}
     
   build_lin:
     name: Build Linux artifacts
@@ -104,6 +104,14 @@ jobs:
     name: Create release and upload artifacts
     runs-on: ubuntu-latest
     steps:
+      - name: Check outputs other job
+        run: |
+          echo "needs.<job_id>.outputs.<output_name>"
+          echo "${{ needs.build_win.outputs.version }}"
+          echo "<job_id>.outputs.<output_name>"
+          echo "2 ${{ build_win.outputs.version }}"
+          echo "<job_id>.outputs.<output_name>"
+          echo "3 ${{ build_win.outputs.version }}"
       - name: Create Release
         id: create_release
         uses: actions/create-release@v1.0.0
