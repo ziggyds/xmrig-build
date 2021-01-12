@@ -16,12 +16,13 @@ jobs:
       - name: Checkout deps
         run:  git clone https://github.com/xmrig/xmrig-deps.git
       - name: Get version
-        id: identify
+        id: version
         run: |
           $ghetto=(Get-Content src\version.h | Select-String -Pattern 'APP_VERSION' -Encoding ASCII | ForEach-Object {($_ -split '\s+')[2]}).Trim('\"');
-          $env:XMRIG_VERSION=$ghetto;
-          $env:XMRIG_VERSION
-          echo "::set-output name=version::${ XMRIG_VERSION }";
+          echo "::set-output name=version::$ghetto";
+      - name: Check outputs
+        shell: pwsh
+        run: echo ${{ steps.version.outputs.version }}
       - name: Build project on Windows
         run: |
           PowerShell "(Get-Content src/donate.h) -replace 'DonateLevel = 1','DonateLevel = 0' | Set-Content src/donate.h"
