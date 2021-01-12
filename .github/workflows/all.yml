@@ -141,7 +141,7 @@ jobs:
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
           asset_path: windows_build/windows_build.zip
-          asset_name: xmrig-${{steps.version.outputs.VERSION}}-win64.zip
+          asset_name: xmrig-${{ needs.build_win.outputs.version }}-win64.zip
           asset_content_type: application/zip
       - name: Upload Ubuntu build release asset
         uses: actions/upload-release-asset@v1.0.1
@@ -150,7 +150,7 @@ jobs:
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
           asset_path: ubuntu_build/ubuntu_build.tar.gz
-          asset_name: xmrig-${{steps.version.outputs.VERSION}}-lin64.tar.gz
+          asset_name: xmrig-${{ needs.build_win.outputs.version }}-lin64.tar.gz
           asset_content_type: application/zip
       - name: Upload MacOS build release asset
         uses: actions/upload-release-asset@v1.0.1
@@ -159,5 +159,5 @@ jobs:
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
           asset_path: macos_build/macos_build.tar.gz
-          asset_name: xmrig-${{steps.version.outputs.VERSION}}-mac64.tar.gz
+          asset_name: xmrig-${{ needs.build_win.outputs.version }}-mac64.tar.gz
           asset_content_type: application/zip
