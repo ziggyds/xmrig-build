@@ -13,9 +13,12 @@ jobs:
     runs-on: ubuntu-latest
  
     steps:
+    - name: Get the version
+      id: get_version
+      run: echo ::set-output name=VERSION::${GITHUB_REF#refs/tags/}
     - uses: actions/checkout@v1
     - name: Build the Docker image
-      run: docker build . --build-arg Version=${{ github.event.release.tag_name }} --file Dockerfile --tag xmrig-docker-unraid:latest
+      run: docker build . --build-arg Version=${{ steps.get_version.outputs.VERSION }} --file Dockerfile --tag xmrig-docker-unraid:latest
     - name: Publish to Registry
       #pre: echo ::save-state name=RELEASE_VERSION::$(echo ${GITHUB_REF:10})
       uses: elgohr/Publish-Docker-Github-Action@master
@@ -24,4 +27,4 @@ jobs:
         username: ${{ secrets.DOCKER_USER }}
         password: ${{ secrets.DOCKER_PASSWORD }}
         #tags: "latest,${{ env.STATE_RELEASE_VERSION }}"
-        tags: "latest,${{ github.event.release.tag_name }}"
+        tags: "latest,${{ steps.get_version.outputs.VERSION }}"
