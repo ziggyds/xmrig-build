@@ -3,6 +3,8 @@ on:
   # elke nieve versie
   release:
     types: [published]
+    tags:
+      - '*'
   # Manueel starte
   workflow_dispatch:
 
@@ -12,7 +14,6 @@ jobs:
  
     steps:
     - name: Get the version
-        id: get_version
         run: echo "VERSION=$(echo ${GITHUB_REF:10})" >> $GITHUB_ENV
     - uses: actions/checkout@v1
     - name: Build the Docker image
