@@ -1,0 +1,23 @@
+name: Image build
+on:
+  # elke nieve versie
+  release:
+    types: [published]
+
+jobs:
+  docker_build: 
+    runs-on: ubuntu-latest
+ 
+    steps:
+    - uses: actions/checkout@v1
+    - name: Build the Docker image
+      run: docker build . --build-arg Version=${{ github.event.release.tag_name }} --file Dockerfile --tag xmrig-docker-unraid:latest
+    - name: Publish to Registry
+      #pre: echo ::save-state name=RELEASE_VERSION::$(echo ${GITHUB_REF:10})
+      uses: elgohr/Publish-Docker-Github-Action@master
+      with:
+        name: ziggyds/xmrig
+        username: ${{ secrets.DOCKER_USER }}
+        password: ${{ secrets.DOCKER_PASSWORD }}
+        #tags: "latest,${{ env.STATE_RELEASE_VERSION }}"
+        tags: "latest,${{ github.event.release.tag_name }}"
