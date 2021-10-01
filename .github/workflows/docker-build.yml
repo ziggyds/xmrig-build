@@ -3,6 +3,8 @@ on:
   # elke nieve versie
   release:
     types: [published]
+  # Manueel starte
+  workflow_dispatch:
 
 jobs:
   docker_build: 
