@@ -15,7 +15,7 @@ jobs:
     steps:
     - name: Get the version
       id: get_version
-      run: echo ::set-output name=VERSION::${GITHUB_REF#refs/tags/}
+      run: echo ::set-output name=VERSION::${GITHUB_REF/refs\/tags\//}
     - uses: actions/checkout@v1
     - name: Build the Docker image
       run: docker build . --build-arg Version=${{ steps.get_version.outputs.VERSION }} --file Dockerfile --tag xmrig-docker-unraid:latest
