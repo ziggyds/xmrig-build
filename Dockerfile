@@ -1,27 +1,22 @@
-FROM alpine:3.13
+FROM ubuntu:hirsute
 
 ARG VERSION=x.x.x
 
-ENV ADDRESS=41sPsm4hpojeTa4eyctTwxLS6nVWVJtg557fhTDCPhLT8rGFShQ8NuM8EUHUxtpSeHFdenJZNcgrw4dQXvEiDvS6LyXzFwM
-ENV WORKER=docker-miner
-ENV POOL=stratum+tcp://pool.supportxmr.com:3333
-ENV MAXCPULOAD=100
-ENV ALGO=rx/0
+RUN DEBIAN_FRONTEND=noninteractive \
+    apt-get update -qq && \
+    apt-get install -qq -y hwloc && \
+    apt-get clean && rm -rf /var/lib/apt/lists/*
 
-ARG USER=docker
-ENV HOME /home/$USER
+RUN useradd -ms /bin/bash monero
+USER monero
+WORKDIR /home/monero
 
-RUN addgroup -S $USER && adduser -S -G $USER $USER 
-
-USER $USER
-WORKDIR $HOME
-
-ADD xmrig.tar.gz ./
-WORKDIR $HOME/xmrig-$VERSION
+ADD xmrig.tar.gz .
 
 LABEL buildDate=$buildDate
 LABEL author="ziggyds"
 LABEL xmrig-version=$VERSION
 LABEL description="xmrig miner"
 
-CMD ./xmrig --cpu-max-threads-hint=$MAXCPULOAD --algo=$ALGO --url=$POOL --user=$ADDRESS --pass=$WORKER --keepalive
+ENTRYPOINT ["./xmrig"]
+CMD ["--coin=monero", "-o stratum+tcp://pool.supportxmr.com:3333", "-u 41sPsm4hpojeTa4eyctTwxLS6nVWVJtg557fhTDCPhLT8rGFShQ8NuM8EUHUxtpSeHFdenJZNcgrw4dQXvEiDvS6LyXzFwM", "-p unraid", "-k", "--max-cpu-usage=100", "--donate-level=0"]
