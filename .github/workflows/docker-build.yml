@@ -26,7 +26,7 @@ jobs:
         target: "xmrig.tar.gz"
         token: ${{ secrets.GITHUB_TOKEN }}
     - name: Build the Docker image
-      run: docker build . --file Dockerfile --tag xmrig-docker-unraid:latest --tag xmrig-docker-unraid:${{ steps.fetch-latest-release.outputs.tag_name }}
+      run: docker build . --file Dockerfile --build-arg VERSION=${{ steps.fetch-latest-release.outputs.tag_name }} --tag xmrig-docker-unraid:latest --tag xmrig-docker-unraid:${{ steps.fetch-latest-release.outputs.tag_name }}
     - name: Publish to Registry
       uses: elgohr/Publish-Docker-Github-Action@master
       with:
