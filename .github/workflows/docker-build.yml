@@ -18,10 +18,6 @@ jobs:
       uses: thebritican/fetch-latest-release@v2.0.0
       with:
         github_token: ${{ github.token }}
-    - name: print out latest release tag
-      run: echo "The latest release tag is $TAG"
-      env:
-        TAG: ${{ steps.fetch-latest-release.outputs.tag_name }}
     - name: Build the Docker image
       run: docker build . --build-arg Version=${{ steps.fetch-latest-release.outputs.tag_name }} --file Dockerfile --tag xmrig-docker-unraid:latest
     - name: Publish to Registry
