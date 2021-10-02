@@ -13,10 +13,10 @@ jobs:
     runs-on: ubuntu-latest
  
     steps:
+    - uses: actions/checkout@v1
     - name: Get last tag
       id: last_tag
       uses: "WyriHaximus/github-action-get-previous-tag@v1"
-    - uses: actions/checkout@v1
     - name: Build the Docker image
       run: docker build . --build-arg Version=${{ steps.last_tag.outputs.tag }} --file Dockerfile --tag xmrig-docker-unraid:latest
     - name: Publish to Registry
