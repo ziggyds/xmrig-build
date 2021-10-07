@@ -1,10 +1,16 @@
 name: Image build
 on:
-  # elke nieve versie
+  # elke nieve versie, elke change
   release:
-    types: [published]
-    #tags:
-      #- '*'
+    types:
+    - published
+    - unpublished
+    - created
+    - edited
+    - deleted
+    - prereleased
+    - released
+
   # Manueel starte
   workflow_dispatch:
 
