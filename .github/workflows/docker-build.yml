@@ -3,8 +3,8 @@ on:
   # elke nieve versie
   release:
     types: [published]
-    tags:
-      - '*'
+    #tags:
+      #- '*'
   # Manueel starte
   workflow_dispatch:
 
