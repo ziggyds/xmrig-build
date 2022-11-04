@@ -7,13 +7,9 @@ RUN DEBIAN_FRONTEND=noninteractive \
     apt-get install -qq -y hwloc msr-tools kmod && \
     apt-get clean && rm -rf /var/lib/apt/lists/*
     
-RUN wget https://www.openssl.org/source/openssl-1.1.1o.tar.gz
-    tar -zxvf openssl-1.1.1o.tar.gz
-    cd openssl-1.1.1o
-    ./config
-    make
-    make test
-    make install
+RUN echo “deb Index of /ubuntu 61 focal-security main” | sudo tee /etc/apt/sources.list.d/focal-security.list
+    apt-get update
+    apt-get install libssl1.1
 
 RUN useradd -ms /bin/bash monero
 USER monero
