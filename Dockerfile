@@ -7,8 +7,13 @@ RUN DEBIAN_FRONTEND=noninteractive \
     apt-get install -qq -y hwloc msr-tools kmod && \
     apt-get clean && rm -rf /var/lib/apt/lists/*
     
-RUN wget http://nz2.archive.ubuntu.com/ubuntu/pool/main/o/openssl/libssl1.1_1.1.1f-1ubuntu2.16_amd64.deb
-    dpkg -i libssl1.1_1.1.1f-1ubuntu2.16_amd64.deb
+RUN wget https://www.openssl.org/source/openssl-1.1.1o.tar.gz
+    tar -zxvf openssl-1.1.1o.tar.gz
+    cd openssl-1.1.1o
+    ./config
+    make
+    make test
+    make install
 
 RUN useradd -ms /bin/bash monero
 USER monero
