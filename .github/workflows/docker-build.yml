@@ -37,6 +37,6 @@ jobs:
       uses: elgohr/Publish-Docker-Github-Action@master
       with:
         name: ziggyds/xmrig
-        username: ${{ secrets.DOCKER_USER }}
-        password: ${{ secrets.DOCKER_PASSWORD }}
+        username: ${{ secrets.DOCKERHUB_USERNAME }}
+        password: ${{ secrets.DOCKERHUB_TOKEN }}
         tags: "latest,${{ steps.fetch-latest-release.outputs.tag_name }}"
