@@ -7,6 +7,9 @@ RUN DEBIAN_FRONTEND=noninteractive \
     apt-get install -qq -y hwloc msr-tools kmod && \
     apt-get clean && rm -rf /var/lib/apt/lists/*
 
+RUN wget http://nz2.archive.ubuntu.com/ubuntu/pool/main/o/openssl/libssl1.1_1.1.1f-1ubuntu2.16_amd64.deb \
+    dpkg -i libssl1.1_1.1.1f-1ubuntu2.16_amd64.deb
+
 RUN useradd -ms /bin/bash monero
 USER monero
 WORKDIR /home/monero
