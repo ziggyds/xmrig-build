@@ -22,8 +22,6 @@ jobs:
           echo "XMRIG_VERSION="`cat src/version.h | grep -Eo "APP_VERSION\s+\"(.+?)\"" | awk -F "\"" '{print $2}'` >> $GITHUB_ENV
           sed -i 's/DonateLevel = 1/DonateLevel = 0/g' src/donate.h
           mkdir build && cd scripts
-          pwd
-          ls -l
           ./build_deps.sh && cd ../build
           cmake .. 
           make -j$(nproc) 
