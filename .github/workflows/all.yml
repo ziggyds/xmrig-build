@@ -41,7 +41,7 @@ jobs:
     
   build_lin:
     name: Build Linux artifacts
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-24.04
     steps:
       - name: Prepare Ubuntu tools
         run: |
