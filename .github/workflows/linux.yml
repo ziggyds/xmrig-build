@@ -25,9 +25,14 @@ jobs:
           ./build_deps.sh && cd ../build
           cmake .. 
           make -j$(nproc) 
-          tar cfz ubuntu_build.tar.gz xmrig
+          tar cfz xmrig-${{ env.XMRIG_VERSION }}.tar.gz xmrig
+          pwd
+          ls -l
       - name: Upload Ubuntu build artifacts
-        uses: actions/upload-artifact@v1
+        uses: actions/upload-artifact@v4
         with:
           name: xmrig-${{ env.XMRIG_VERSION }}
           path: ubuntu_build.tar.gz
+          if-no-files-found: error
+          retention-days: 7
+          overwrite: true
