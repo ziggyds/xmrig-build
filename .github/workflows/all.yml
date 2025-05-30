@@ -9,7 +9,7 @@ jobs:
     runs-on: windows-2019
     steps:
       - name: Checkout Repository master branch
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
         with:
           repository: xmrig/xmrig
           ref: master  
@@ -47,7 +47,7 @@ jobs:
         run: |
           sudo apt-get install -y git build-essential cmake libuv1-dev libssl-dev libhwloc-dev
       - name: Checkout Repository master branch
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
         with:
           repository: xmrig/xmrig
           ref: master
@@ -73,7 +73,7 @@ jobs:
         run: |
           brew install cmake libuv openssl hwloc
       - name: Checkout Repository master branch
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
         with:
           repository: xmrig/xmrig
           ref: master
@@ -123,15 +123,15 @@ jobs:
         id: version
         run: echo ::set-output name=VERSION::${GITHUB_REF:10}
       - name: Download Windows build artifact
-        uses: actions/download-artifact@v1
+        uses: actions/download-artifact@v4
         with:
           name: windows_build
       - name: Download Linux build artifact
-        uses: actions/download-artifact@v1
+        uses: actions/download-artifact@v4
         with:
           name: ubuntu_build
       - name: Download MacOS build artifact
-        uses: actions/download-artifact@v1
+        uses: actions/download-artifact@v4
         with:
           name: macos_build
       - name: Upload Windows build release asset
